@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#5a3519">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="description" content="공룡 친구들과 함께하는 수학 탐험 게임">
+  <title>공룡 수학 탐험대</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Jua&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <noscript><p class="noscript">이 게임을 하려면 브라우저에서 자바스크립트를 켜 주세요.</p></noscript>
+
+  <main id="app">
+    <!-- Cover -->
+    <section id="screen-cover" class="screen" aria-label="표지">
+      <div class="cover-bg" aria-hidden="true"></div>
+      <h1 class="logo" aria-label="공룡 수학 탐험대">
+        <span class="logo-line logo-line1" aria-hidden="true"><span class="ls">공룡 수학</span><span class="lf">공룡 수학</span></span>
+        <span class="logo-line logo-line2" aria-hidden="true"><span class="ls">탐험대</span><span class="lf">탐험대</span></span>
+      </h1>
+      <button id="btn-start" class="btn btn-start" type="button">시작하기</button>
+      <p class="cover-desc desc">브라키오, 스테고, 티라노와 함께 수학 모험을 떠나요!</p>
+      <div class="cover-dinos" aria-hidden="true"></div>
+    </section>
+
+    <!-- Stage selection -->
+    <section id="screen-stages" class="screen" aria-label="스테이지 선택" hidden>
+      <header class="screen-head">
+        <h2 class="screen-title">스테이지를 골라요</h2>
+        <p class="screen-desc desc">탐험하고 싶은 곳을 눌러 보세요. 어느 곳이든 바로 갈 수 있어요.</p>
+      </header>
+      <div class="carousel">
+        <button class="carousel-nav prev" type="button" aria-label="이전 스테이지">◀</button>
+        <div class="stage-cards" tabindex="0" aria-label="스테이지 목록, 옆으로 밀어서 넘겨요"></div>
+        <button class="carousel-nav next" type="button" aria-label="다음 스테이지">▶</button>
+      </div>
+      <div class="carousel-dots" aria-hidden="true"></div>
+    </section>
+
+    <!-- Level map -->
+    <section id="screen-map" class="screen" aria-label="단계 지도" hidden>
+      <header class="map-head">
+        <button class="btn btn-small btn-back" type="button" data-go="stages" aria-label="스테이지 선택으로 돌아가기"><span aria-hidden="true">◀</span> 스테이지</button>
+        <h2 class="map-title"></h2>
+      </header>
+      <p class="map-desc desc">길을 따라 단계를 골라요. 옆으로 밀면 더 많은 단계가 있어요.</p>
+      <div class="map-scroll" tabindex="0">
+        <div class="map-inner"></div>
+      </div>
+      <div class="map-guardian dino walk" aria-hidden="true"></div>
+    </section>
+
+    <!-- Play -->
+    <section id="screen-play" class="screen" aria-label="문제 풀기" hidden></section>
+
+    <!-- Standalone calculator -->
+    <section id="screen-calc" class="screen" aria-label="계산기" hidden>
+      <div class="calc-bg" aria-hidden="true"></div>
+      <div class="calc-stage">
+        <div class="calc-friend f-brachio" aria-hidden="true"></div>
+        <div class="calc-body" id="standalone-calc">
+          <div class="calc-brand">공룡 계산기</div>
+          <div class="calc-mount-display"></div>
+          <div class="calc-mount-keys"></div>
+          <svg class="crack-lines" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M52 0 L46 22 L58 36 L44 58 L55 78 L40 102 L50 140"/>
+            <path d="M46 22 L18 30 L4 44"/><path d="M58 36 L82 40 L100 30"/>
+            <path d="M44 58 L22 70 L0 72"/><path d="M55 78 L80 92 L96 112"/><path d="M40 102 L14 118"/>
+          </svg>
+        </div>
+        <div class="calc-friend f-stego" aria-hidden="true"></div>
+        <div class="calc-friend f-tyranno" aria-hidden="true"></div>
+      </div>
+      <p class="calc-desc desc">숫자와 기호를 눌러 계산해요. 다 계산하면 빨갛게 반짝이는 AC를 눌러요.</p>
+    </section>
+
+    <!-- Hidden runner -->
+    <section id="screen-runner" class="screen" aria-label="스피노의 대탈출" hidden></section>
+  </main>
+
+  <!-- Global menu button -->
+  <button id="menu-btn" class="menu-btn" type="button" aria-label="메뉴 열기" aria-haspopup="dialog" aria-controls="menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Menu -->
+  <div id="menu" class="overlay" role="dialog" aria-modal="true" aria-label="메뉴" hidden>
+    <div class="menu-panel">
+      <div class="menu-view" data-view="main">
+        <h2 class="menu-title">메뉴</h2>
+        <div class="menu-grid">
+          <button type="button" class="m-item m-wide m-green" data-act="continue">이어하기</button>
+          <button type="button" class="m-item" data-act="cover">표지로</button>
+          <button type="button" class="m-item" data-act="stages">스테이지 선택</button>
+          <button type="button" class="m-item" data-act="map">현재 스테이지 지도</button>
+          <button type="button" class="m-item" data-act="skip">문제 건너뛰기</button>
+          <button type="button" class="m-item" data-act="picker">단계 바로 고르기</button>
+          <button type="button" class="m-item" data-act="calc">계산기</button>
+        </div>
+        <h3 class="menu-sub">설정</h3>
+        <div class="menu-grid toggles">
+          <button type="button" class="m-toggle" data-setting="hints" aria-pressed="true"><span class="t-label">힌트</span><span class="t-state"></span></button>
+          <button type="button" class="m-toggle" data-setting="desc" aria-pressed="true"><span class="t-label">설명 글</span><span class="t-state"></span></button>
+          <button type="button" class="m-toggle" data-setting="sfx" aria-pressed="true"><span class="t-label">효과음</span><span class="t-state"></span></button>
+          <button type="button" class="m-toggle" data-setting="music" aria-pressed="true"><span class="t-label">배경 음악</span><span class="t-state"></span></button>
+        </div>
+        <button type="button" class="m-item m-wide m-danger" data-act="reset">클리어 기록 초기화</button>
+      </div>
+      <div class="menu-view" data-view="picker" hidden>
+        <h2 class="menu-title">단계 바로 고르기</h2>
+        <div class="picker-stages" role="tablist" aria-label="스테이지 고르기"></div>
+        <div class="picker-levels"></div>
+        <button type="button" class="m-item m-wide" data-act="back-main">◀ 메뉴로</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset confirmation -->
+  <div id="confirm-reset" class="overlay" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text" hidden>
+    <div class="dialog">
+      <h2 id="confirm-title">클리어 기록을 지울까요?</h2>
+      <p id="confirm-text">모든 스테이지의 클리어 기록이 지워져요.<br>소리, 음악, 힌트, 설명 글 설정은 그대로 남아요.</p>
+      <div class="dialog-buttons">
+        <button type="button" class="btn btn-big btn-teal" data-act="cancel">취소</button>
+        <button type="button" class="btn btn-big btn-red" data-act="confirm">초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level clear -->
+  <div id="clear-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="clear-title" hidden>
+    <div class="dialog clear-dialog">
+      <div class="clear-guardian dino" aria-hidden="true"></div>
+      <h2 id="clear-title"></h2>
+      <div class="clear-stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span></div>
+      <p class="clear-text desc">정답을 3개 맞혔어요. 정말 잘했어요!</p>
+      <div class="dialog-buttons">
+        <button type="button" class="btn btn-big btn-teal" data-act="map">지도로</button>
+        <button type="button" class="btn btn-big btn-orange" data-act="next">다음 단계 ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration and wrong-answer feedback -->
+  <div id="celebrate" aria-hidden="true" hidden>
+    <canvas class="fireworks"></canvas>
+    <div class="celebrate-dino dino"></div>
+  </div>
+  <div id="wrong-flash" aria-hidden="true"></div>
+  <div id="shards" aria-hidden="true"></div>
+  <div id="sound-hint" class="sound-hint desc" hidden>화면을 누르면 소리가 나와요 🔊</div>
+
+  <script src="js/math/generator.js"></script>
+  <script src="js/math/stories.js"></script>
+  <script src="js/math/progress.js"></script>
+  <script src="js/ui/boards.js"></script>
+  <script src="js/calc/calc-engine.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/music.js"></script>
+  <script src="js/core/audio.js"></script>
+  <script src="js/runner/runner-logic.js"></script>
+  <script src="js/ui/art.js"></script>
+  <script src="js/ui/drag.js"></script>
+  <script src="js/calc/calc-ui.js"></script>
+  <script src="js/runner/runner.js"></script>
+  <script src="js/app/play.js"></script>
+  <script src="js/app/app.js"></script>
+</body>
+</html>

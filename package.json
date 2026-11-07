@@ -1,0 +1,12 @@
+{
+  "name": "dino-math-explorers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "공룡 수학 탐험대 — 태블릿용 한국어 수학 학습 게임",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/unit/*.test.js",
+    "test:e2e": "node tests/e2e/e2e.js"
+  },
+  "license": "UNLICENSED"
+}
