@@ -40,6 +40,8 @@
       b.setAttribute('aria-label', d.aria || d.label);
       b.dataset.key = d.k;
       b.addEventListener('click', () => press(d.k));
+      // Pointer presses do not move focus, so a hardware Enter still means "=".
+      b.addEventListener('pointerdown', (e) => e.preventDefault());
       keys.appendChild(b);
       btns[d.k] = b;
     });

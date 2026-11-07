@@ -98,6 +98,9 @@
       }
       if (this.screen === 'play' && name !== 'play') this.play.leave();
       $$('.screen').forEach((s) => (s.hidden = s.id !== 'screen-' + name));
+      // Focus left on a now-hidden screen would swallow keyboard input.
+      const ae = document.activeElement;
+      if (ae && ae !== document.body && ae.closest && ae.closest('.screen[hidden]')) ae.blur();
       this.screen = name;
       document.body.dataset.screen = name;
       document.body.dataset.stage = this.currentStage;
@@ -562,7 +565,8 @@
         if (!calc) return;
         const k = CalcUI.keyFromEvent(e);
         if (!k) return;
-        if ((k === '=' && e.key === 'Enter') && e.target && e.target.tagName === 'BUTTON') return; // let Enter press the focused button
+        // Enter on a visible focused button presses that button instead.
+        if (k === '=' && e.key === 'Enter' && e.target && e.target.tagName === 'BUTTON' && e.target.offsetParent !== null) return;
         e.preventDefault();
         calc.press(k);
       });

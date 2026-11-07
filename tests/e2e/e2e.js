@@ -364,8 +364,9 @@ async function waitNextQuestion(page, prevId) {
   });
 
   await step('secret: typing 2243003 then "=" breaks the calculator and opens the runner', async () => {
+    // Enter right after tapping on-screen keys must still mean "=".
     await page.keyboard.type('2243003');
-    await page.keyboard.press('=');
+    await page.keyboard.press('Enter');
     await page.waitForTimeout(250);
     assert.ok(await page.$eval('#standalone-calc', (e) => e.classList.contains('cracking')));
     await page.waitForTimeout(800);

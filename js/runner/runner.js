@@ -287,8 +287,9 @@
     }
 
     _onCrash() {
-      this.shake = 0.45;
-      this.flash = 0.5;
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.shake = reduce ? 0 : 0.45;
+      this.flash = reduce ? 0.25 : 0.5;
       this.overAt = performance.now();
       if (this.audio) {
         this.audio.play('crash');
